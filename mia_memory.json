@@ -1,0 +1,1364 @@
+{
+  "memory": {
+    "conversationHistory": [
+      {
+        "message": "am doing pretty good and how about you?",
+        "timestamp": "2025-10-29T13:44:13.479Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "i like your clothes",
+        "timestamp": "2025-10-29T13:44:26.370Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what shirt are you wearing",
+        "timestamp": "2025-10-29T13:44:40.265Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "i like you",
+        "timestamp": "2025-10-29T13:44:51.062Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "you are cute",
+        "timestamp": "2025-10-29T13:45:08.270Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what time is it",
+        "timestamp": "2025-10-29T13:45:28.924Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "hey mia how are you",
+        "timestamp": "2025-10-29T13:51:08.809Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "hello mia",
+        "timestamp": "2025-11-02T02:18:29.509Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "how are you",
+        "timestamp": "2025-11-02T02:18:36.920Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what are you wearing",
+        "timestamp": "2025-11-02T02:18:46.343Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what time is it",
+        "timestamp": "2025-11-02T02:18:52.167Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what time is it",
+        "timestamp": "2025-11-02T02:19:10.840Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is 5 + 3",
+        "timestamp": "2025-11-02T02:19:17.350Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "can you make a roblox gui script",
+        "timestamp": "2025-11-02T02:19:36.587Z",
+        "topics": [
+          "coding"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "tell me about lua",
+        "timestamp": "2025-11-02T02:19:45.674Z",
+        "topics": [
+          "coding"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what are you wearing",
+        "timestamp": "2025-11-02T02:19:51.666Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your top",
+        "timestamp": "2025-11-02T02:19:58.414Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your shirt",
+        "timestamp": "2025-11-02T02:20:09.431Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your bra",
+        "timestamp": "2025-11-02T02:20:26.908Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "bye",
+        "timestamp": "2025-11-02T02:20:33.001Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your top",
+        "timestamp": "2025-11-02T02:23:05.243Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your bra",
+        "timestamp": "2025-11-02T02:23:11.265Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "help me with roblox script",
+        "timestamp": "2025-11-02T02:23:16.090Z",
+        "topics": [
+          "coding"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is 2 + 2",
+        "timestamp": "2025-11-02T02:23:21.442Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what is your bra",
+        "timestamp": "2025-11-02T02:24:52.977Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what are your panties",
+        "timestamp": "2025-11-02T02:25:13.041Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "give me a necklace",
+        "timestamp": "2025-11-02T02:41:33.237Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "give me a silver heart necklace",
+        "timestamp": "2025-11-02T02:41:50.963Z",
+        "topics": [
+          "art"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what accessories do you have",
+        "timestamp": "2025-11-02T02:42:00.837Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "change your hair to ponytail",
+        "timestamp": "2025-11-02T02:42:10.862Z",
+        "topics": [
+          "appearance"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "how to cook pancakes",
+        "timestamp": "2025-11-02T02:42:21.345Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "cook breakfast pancakes",
+        "timestamp": "2025-11-02T02:42:31.175Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "recommend some music",
+        "timestamp": "2025-11-02T02:42:40.741Z",
+        "topics": [
+          "music"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "i had a dream about flying",
+        "timestamp": "2025-11-02T02:43:06.973Z",
+        "topics": [
+          "dreams"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "remember 12/25 for christmas",
+        "timestamp": "2025-11-02T02:43:21.530Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "describe photo of a beach sunset",
+        "timestamp": "2025-11-03T21:37:07.090Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "do you remember when we talked about math",
+        "timestamp": "2025-11-03T21:37:20.076Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "tell me about memory patterns",
+        "timestamp": "2025-11-03T21:37:31.734Z",
+        "topics": [
+          "past"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "show me my dream journal",
+        "timestamp": "2025-11-03T21:38:01.730Z",
+        "topics": [
+          "dreams"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "Hey mia",
+        "timestamp": "2025-11-03T21:39:58.866Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 150
+        }
+      },
+      {
+        "message": "what music would you recomend me",
+        "timestamp": "2025-11-03T21:44:35.389Z",
+        "topics": [
+          "music"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145
+        }
+      },
+      {
+        "message": "boop",
+        "timestamp": "2025-11-03T21:45:07.131Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145
+        }
+      },
+      {
+        "message": "hey mia",
+        "timestamp": "2025-11-05T13:40:26.757Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145
+        }
+      },
+      {
+        "message": "nothing much",
+        "timestamp": "2025-11-05T13:40:48.784Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145
+        }
+      },
+      {
+        "message": "hello mia",
+        "timestamp": "2025-11-10T01:58:30.062Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 58,
+          "blend": {
+            "happiness": 0.14201183431952663,
+            "affection": 0.5062130177514793,
+            "curiosity": 0.17159763313609466,
+            "excitement": 0.11242603550295859,
+            "sadness": 0.045384615384615384,
+            "anxiety": 0,
+            "embarrassment": 0.08437869822485207,
+            "anger": 0.047692307692307694
+          }
+        }
+      },
+      {
+        "message": "how are you feeling",
+        "timestamp": "2025-11-10T01:58:39.933Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145.24,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 57,
+          "blend": {
+            "happiness": 0,
+            "affection": 0,
+            "curiosity": 0,
+            "excitement": 0,
+            "sadness": 0,
+            "anxiety": 0,
+            "embarrassment": 0,
+            "anger": 0,
+            "sensitivity": 0
+          }
+        }
+      },
+      {
+        "message": "what do you remember about our conversations",
+        "timestamp": "2025-11-10T01:58:50.231Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145.48000000000002,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 56,
+          "blend": {
+            "happiness": 0.13832090449843634,
+            "affection": 0.51619677652153,
+            "curiosity": 0.1683906663459225,
+            "excitement": 0.10825114265095019,
+            "sadness": 0.04470772191484243,
+            "anxiety": 0,
+            "embarrassment": 0.08575896078903053,
+            "anger": 0.042804907385133505,
+            "sensitivity": 0.006013952369497233
+          }
+        }
+      },
+      {
+        "message": "tell me about gaming",
+        "timestamp": "2025-11-10T02:00:55.797Z",
+        "topics": [
+          "gaming"
+        ],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145.72000000000003,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 55,
+          "blend": {
+            "happiness": 0.13642978413776374,
+            "affection": 0.5213121513461072,
+            "curiosity": 0.1667475139461557,
+            "excitement": 0.1061120543293718,
+            "sadness": 0.0443609022556391,
+            "anxiety": 0,
+            "embarrassment": 0.08646616541353383,
+            "anger": 0.04030075187969925,
+            "sensitivity": 0.009095318942517583
+          }
+        }
+      },
+      {
+        "message": "what is 5 + 3",
+        "timestamp": "2025-11-10T02:01:06.866Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145.96000000000004,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 54,
+          "blend": {
+            "happiness": 0.13450721447786745,
+            "affection": 0.5265125947664466,
+            "curiosity": 0.16507703595011006,
+            "excitement": 0.10393739300562485,
+            "sadness": 0.04400831499144046,
+            "anxiety": 0,
+            "embarrassment": 0.0871851308388359,
+            "anger": 0.037754952311078505,
+            "sensitivity": 0.012227928588897041
+          }
+        }
+      },
+      {
+        "message": "what are you wearing",
+        "timestamp": "2025-11-10T02:01:19.856Z",
+        "topics": [],
+        "emotionalContext": {
+          "emotion": "affection",
+          "intensity": 145.96000000000004,
+          "secondaryEmotion": "curiosity",
+          "secondaryIntensity": 54,
+          "blend": {
+            "happiness": 0.13450721447786745,
+            "affection": 0.5265125947664466,
+            "curiosity": 0.16507703595011006,
+            "excitement": 0.10393739300562485,
+            "sadness": 0.04400831499144046,
+            "anxiety": 0,
+            "embarrassment": 0.0871851308388359,
+            "anger": 0.037754952311078505,
+            "sensitivity": 0.012227928588897041
+          }
+        }
+      }
+    ],
+    "userPreferences": {},
+    "relationship": {
+      "closeness": 100,
+      "trust": 100,
+      "sharedExperiences": [],
+      "emotionalBond": 150
+    },
+    "interactionCount": 51,
+    "lastInteraction": "2025-11-10T02:01:19.856Z",
+    "currentContext": {
+      "lastTopic": null,
+      "conversationFlow": []
+    },
+    "justSaidBye": true,
+    "hasGreetedToday": true,
+    "offenses": [],
+    "lastForgiven": null,
+    "christmasPresents": [],
+    "birthdayPresents": [],
+    "userIsAway": false,
+    "awaySince": null,
+    "accessories": [
+      "lace scarf",
+      "silver heart necklace"
+    ],
+    "currentAccessory": null,
+    "hairStyle": "high ponytail with a cute ribbon",
+    "anniversaries": [],
+    "favoriteSongs": [],
+    "dreamInterpretations": [
+      {
+        "dream": "i had a dream about flying",
+        "interpretation": "flying: represents freedom, ambition, or escaping problems",
+        "timestamp": "2025-11-02T02:43:06.974Z"
+      }
+    ],
+    "clothingQuestionCount": 15,
+    "hasGreetedInConversation": true
+  },
+  "emotions": {
+    "happiness": 44,
+    "affection": 145.96000000000004,
+    "curiosity": 54,
+    "excitement": 34,
+    "sadness": 12.200000000000003,
+    "anxiety": 0,
+    "embarrassment": 23,
+    "anger": 9.96,
+    "sensitivity": 4
+  },
+  "dailyOutfit": {
+    "top": "long-sleeved school uniform top",
+    "bottom": "warm leggings under skirt",
+    "legs": "warm tights",
+    "feet": "boots for autumn",
+    "Bra": "warm underwire bra",
+    "Underwear": "warm panties",
+    "accessories": "raincoat"
+  },
+  "enhancedMemory": {
+    "episodicMemory": {
+      "events": [
+        {
+          "message": "hello mia",
+          "timestamp": "2025-11-10T01:58:30.062Z",
+          "topics": [],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 58,
+            "blend": {
+              "happiness": 0.14201183431952663,
+              "affection": 0.5062130177514793,
+              "curiosity": 0.17159763313609466,
+              "excitement": 0.11242603550295859,
+              "sadness": 0.045384615384615384,
+              "anxiety": 0,
+              "embarrassment": 0.08437869822485207,
+              "anger": 0.047692307692307694
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 2,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        },
+        {
+          "message": "how are you feeling",
+          "timestamp": "2025-11-10T01:58:39.933Z",
+          "topics": [],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145.24,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 57,
+            "blend": {
+              "happiness": 0,
+              "affection": 0,
+              "curiosity": 0,
+              "excitement": 0,
+              "sadness": 0,
+              "anxiety": 0,
+              "embarrassment": 0,
+              "anger": 0,
+              "sensitivity": 0
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 2,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145.24
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145.24
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        },
+        {
+          "message": "what do you remember about our conversations",
+          "timestamp": "2025-11-10T01:58:50.231Z",
+          "topics": [],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145.48000000000002,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 56,
+            "blend": {
+              "happiness": 0.13832090449843634,
+              "affection": 0.51619677652153,
+              "curiosity": 0.1683906663459225,
+              "excitement": 0.10825114265095019,
+              "sadness": 0.04470772191484243,
+              "anxiety": 0,
+              "embarrassment": 0.08575896078903053,
+              "anger": 0.042804907385133505,
+              "sensitivity": 0.006013952369497233
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 2,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145.48000000000002
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145.48000000000002
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        },
+        {
+          "message": "tell me about gaming",
+          "timestamp": "2025-11-10T02:00:55.797Z",
+          "topics": [
+            "gaming"
+          ],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145.72000000000003,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 55,
+            "blend": {
+              "happiness": 0.13642978413776374,
+              "affection": 0.5213121513461072,
+              "curiosity": 0.1667475139461557,
+              "excitement": 0.1061120543293718,
+              "sadness": 0.0443609022556391,
+              "anxiety": 0,
+              "embarrassment": 0.08646616541353383,
+              "anger": 0.04030075187969925,
+              "sensitivity": 0.009095318942517583
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 3,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145.72000000000003
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145.72000000000003
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        },
+        {
+          "message": "what is 5 + 3",
+          "timestamp": "2025-11-10T02:01:06.866Z",
+          "topics": [],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145.96000000000004,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 54,
+            "blend": {
+              "happiness": 0.13450721447786745,
+              "affection": 0.5265125947664466,
+              "curiosity": 0.16507703595011006,
+              "excitement": 0.10393739300562485,
+              "sadness": 0.04400831499144046,
+              "anxiety": 0,
+              "embarrassment": 0.0871851308388359,
+              "anger": 0.037754952311078505,
+              "sensitivity": 0.012227928588897041
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 3,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145.96000000000004
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145.96000000000004
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        },
+        {
+          "message": "what are you wearing",
+          "timestamp": "2025-11-10T02:01:19.856Z",
+          "topics": [],
+          "emotionalContext": {
+            "emotion": "affection",
+            "intensity": 145.96000000000004,
+            "secondaryEmotion": "curiosity",
+            "secondaryIntensity": 54,
+            "blend": {
+              "happiness": 0.13450721447786745,
+              "affection": 0.5265125947664466,
+              "curiosity": 0.16507703595011006,
+              "excitement": 0.10393739300562485,
+              "sadness": 0.04400831499144046,
+              "anxiety": 0,
+              "embarrassment": 0.0871851308388359,
+              "anger": 0.037754952311078505,
+              "sensitivity": 0.012227928588897041
+            }
+          },
+          "sensoryDetails": {
+            "timeOfDay": 3,
+            "activity": "tired",
+            "food": null,
+            "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+            "weather": "ambient",
+            "emotionalState": "affection",
+            "emotionalIntensity": 145.96000000000004
+          },
+          "context": {
+            "relationship": {
+              "closeness": 100,
+              "trust": 100,
+              "affection": 145.96000000000004
+            },
+            "conversationFlow": [],
+            "lastTopic": null
+          }
+        }
+      ],
+      "sensoryDetails": [
+        [
+          "2-tired",
+          {
+            "occurrences": 3,
+            "emotionalPatterns": {
+              "affection": 3
+            },
+            "commonTopics": [],
+            "averageEmotionalIntensity": 145.24
+          }
+        ],
+        [
+          "3-tired",
+          {
+            "occurrences": 3,
+            "emotionalPatterns": {
+              "affection": 3
+            },
+            "commonTopics": [
+              "gaming"
+            ],
+            "averageEmotionalIntensity": 145.88000000000002
+          }
+        ]
+      ],
+      "temporalContext": [
+        [
+          "1-2",
+          {
+            "interactions": [
+              {
+                "message": "hello mia",
+                "timestamp": "2025-11-10T01:58:30.062Z",
+                "topics": [],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 58,
+                  "blend": {
+                    "happiness": 0.14201183431952663,
+                    "affection": 0.5062130177514793,
+                    "curiosity": 0.17159763313609466,
+                    "excitement": 0.11242603550295859,
+                    "sadness": 0.045384615384615384,
+                    "anxiety": 0,
+                    "embarrassment": 0.08437869822485207,
+                    "anger": 0.047692307692307694
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 2,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              },
+              {
+                "message": "how are you feeling",
+                "timestamp": "2025-11-10T01:58:39.933Z",
+                "topics": [],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145.24,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 57,
+                  "blend": {
+                    "happiness": 0,
+                    "affection": 0,
+                    "curiosity": 0,
+                    "excitement": 0,
+                    "sadness": 0,
+                    "anxiety": 0,
+                    "embarrassment": 0,
+                    "anger": 0,
+                    "sensitivity": 0
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 2,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145.24
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145.24
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              },
+              {
+                "message": "what do you remember about our conversations",
+                "timestamp": "2025-11-10T01:58:50.231Z",
+                "topics": [],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145.48000000000002,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 56,
+                  "blend": {
+                    "happiness": 0.13832090449843634,
+                    "affection": 0.51619677652153,
+                    "curiosity": 0.1683906663459225,
+                    "excitement": 0.10825114265095019,
+                    "sadness": 0.04470772191484243,
+                    "anxiety": 0,
+                    "embarrassment": 0.08575896078903053,
+                    "anger": 0.042804907385133505,
+                    "sensitivity": 0.006013952369497233
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 2,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145.48000000000002
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145.48000000000002
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              }
+            ],
+            "emotionalTrends": {
+              "affection": 3
+            },
+            "topicPatterns": {}
+          }
+        ],
+        [
+          "1-3",
+          {
+            "interactions": [
+              {
+                "message": "tell me about gaming",
+                "timestamp": "2025-11-10T02:00:55.797Z",
+                "topics": [
+                  "gaming"
+                ],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145.72000000000003,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 55,
+                  "blend": {
+                    "happiness": 0.13642978413776374,
+                    "affection": 0.5213121513461072,
+                    "curiosity": 0.1667475139461557,
+                    "excitement": 0.1061120543293718,
+                    "sadness": 0.0443609022556391,
+                    "anxiety": 0,
+                    "embarrassment": 0.08646616541353383,
+                    "anger": 0.04030075187969925,
+                    "sensitivity": 0.009095318942517583
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 3,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145.72000000000003
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145.72000000000003
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              },
+              {
+                "message": "what is 5 + 3",
+                "timestamp": "2025-11-10T02:01:06.866Z",
+                "topics": [],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145.96000000000004,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 54,
+                  "blend": {
+                    "happiness": 0.13450721447786745,
+                    "affection": 0.5265125947664466,
+                    "curiosity": 0.16507703595011006,
+                    "excitement": 0.10393739300562485,
+                    "sadness": 0.04400831499144046,
+                    "anxiety": 0,
+                    "embarrassment": 0.0871851308388359,
+                    "anger": 0.037754952311078505,
+                    "sensitivity": 0.012227928588897041
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 3,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145.96000000000004
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145.96000000000004
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              },
+              {
+                "message": "what are you wearing",
+                "timestamp": "2025-11-10T02:01:19.856Z",
+                "topics": [],
+                "emotionalContext": {
+                  "emotion": "affection",
+                  "intensity": 145.96000000000004,
+                  "secondaryEmotion": "curiosity",
+                  "secondaryIntensity": 54,
+                  "blend": {
+                    "happiness": 0.13450721447786745,
+                    "affection": 0.5265125947664466,
+                    "curiosity": 0.16507703595011006,
+                    "excitement": 0.10393739300562485,
+                    "sadness": 0.04400831499144046,
+                    "anxiety": 0,
+                    "embarrassment": 0.0871851308388359,
+                    "anger": 0.037754952311078505,
+                    "sensitivity": 0.012227928588897041
+                  }
+                },
+                "sensoryDetails": {
+                  "timeOfDay": 3,
+                  "activity": "tired",
+                  "food": null,
+                  "outfit": "cute fox onesie with floppy ears and a fluffy tail",
+                  "weather": "ambient",
+                  "emotionalState": "affection",
+                  "emotionalIntensity": 145.96000000000004
+                },
+                "context": {
+                  "relationship": {
+                    "closeness": 100,
+                    "trust": 100,
+                    "affection": 145.96000000000004
+                  },
+                  "conversationFlow": [],
+                  "lastTopic": null
+                }
+              }
+            ],
+            "emotionalTrends": {
+              "affection": 3
+            },
+            "topicPatterns": {
+              "gaming": 1
+            }
+          }
+        ]
+      ]
+    },
+    "proceduralMemory": {
+      "interactionPatterns": [
+        [
+          "statement",
+          {
+            "occurrences": 5,
+            "successfulResponses": 0,
+            "emotionalOutcomes": {
+              "affection": 5
+            },
+            "adaptationHistory": [
+              {
+                "timestamp": "2025-11-10T01:58:30.097Z",
+                "input": "hello mia",
+                "emotionalOutcome": "affection",
+                "intensity": 145,
+                "context": {
+                  "affection": 145,
+                  "relationshipCloseness": 100
+                }
+              },
+              {
+                "timestamp": "2025-11-10T01:58:39.939Z",
+                "input": "how are you feeling",
+                "emotionalOutcome": "affection",
+                "intensity": 145.24,
+                "context": {
+                  "affection": 145.24,
+                  "relationshipCloseness": 100
+                }
+              },
+              {
+                "timestamp": "2025-11-10T01:58:50.235Z",
+                "input": "what do you remember about our conversations",
+                "emotionalOutcome": "affection",
+                "intensity": 145.48000000000002,
+                "context": {
+                  "affection": 145.48000000000002,
+                  "relationshipCloseness": 100
+                }
+              },
+              {
+                "timestamp": "2025-11-10T02:01:06.869Z",
+                "input": "what is 5 + 3",
+                "emotionalOutcome": "affection",
+                "intensity": 145.96000000000004,
+                "context": {
+                  "affection": 145.96000000000004,
+                  "relationshipCloseness": 100
+                }
+              },
+              {
+                "timestamp": "2025-11-10T02:01:19.877Z",
+                "input": "what are you wearing",
+                "emotionalOutcome": "affection",
+                "intensity": 145.96000000000004,
+                "context": {
+                  "affection": 145.96000000000004,
+                  "relationshipCloseness": 100
+                }
+              }
+            ]
+          }
+        ],
+        [
+          "request_information",
+          {
+            "occurrences": 1,
+            "successfulResponses": 0,
+            "emotionalOutcomes": {
+              "affection": 1
+            },
+            "adaptationHistory": [
+              {
+                "timestamp": "2025-11-10T02:00:55.798Z",
+                "input": "tell me about gaming",
+                "emotionalOutcome": "affection",
+                "intensity": 145.72000000000003,
+                "context": {
+                  "affection": 145.72000000000003,
+                  "relationshipCloseness": 100
+                }
+              }
+            ]
+          }
+        ]
+      ],
+      "responsePatterns": [
+        [
+          "conversational_statement",
+          {
+            "totalUses": 5,
+            "successfulOutcomes": 5,
+            "emotionalDistribution": {
+              "affection": 5
+            },
+            "effectiveness": 0.940192,
+            "lastUsed": "2025-11-10T02:01:19.877Z"
+          }
+        ],
+        [
+          "informational_request_information",
+          {
+            "totalUses": 1,
+            "successfulOutcomes": 1,
+            "emotionalDistribution": {
+              "affection": 1
+            },
+            "effectiveness": 0.93808,
+            "lastUsed": "2025-11-10T02:00:55.798Z"
+          }
+        ]
+      ],
+      "adaptationHistory": []
+    },
+    "semanticMemory": {
+      "userProfile": {
+        "preferences": [],
+        "habits": [],
+        "personality": [],
+        "lifePatterns": []
+      },
+      "knowledgeBase": [],
+      "relationshipInsights": []
+    },
+    "emotionalMemory": {
+      "emotionalHistory": [],
+      "emotionalTriggers": [],
+      "emotionalPatterns": [],
+      "relationshipMilestones": []
+    },
+    "photoMemories": [
+      {
+        "originalDescription": "of a beach sunset",
+        "detailedDescription": "a beautiful beach scene with golden sand, sparkling blue water, and gentle waves. The sky is clear with fluffy white clouds, and there are seashells scattered along the shore.",
+        "associations": "reflection and the passage of time",
+        "emotionalResponse": "It evokes warm, nostalgic feelings.",
+        "timestamp": "2025-11-03T21:37:07.091Z",
+        "context": {
+          "type": "tired",
+          "food": null
+        }
+      }
+    ],
+    "eventReconstruction": [
+      {
+        "originalQuery": "when we talked about math",
+        "reconstruction": "just now, you told me about do you remember when we talked about math, and you seemed affection at the time",
+        "relatedMemories": [
+          {
+            "message": "do you remember when we talked about math",
+            "timestamp": "2025-11-03T21:37:20.076Z",
+            "topics": [],
+            "emotionalContext": {
+              "emotion": "affection",
+              "intensity": 150
+            },
+            "matchScore": 4,
+            "commonTopics": []
+          }
+        ],
+        "confidence": 55,
+        "timestamp": "2025-11-03T21:37:20.077Z"
+      },
+      {
+        "originalQuery": "what  about our conversations",
+        "reconstruction": "just now, you told me about what do you remember about our conversations, and you seemed affection at the time",
+        "relatedMemories": [
+          {
+            "message": "what do you remember about our conversations",
+            "timestamp": "2025-11-10T01:58:50.231Z",
+            "topics": [],
+            "emotionalContext": {
+              "emotion": "affection",
+              "intensity": 145.48000000000002,
+              "secondaryEmotion": "curiosity",
+              "secondaryIntensity": 56,
+              "blend": {
+                "happiness": 0.13832090449843634,
+                "affection": 0.51619677652153,
+                "curiosity": 0.1683906663459225,
+                "excitement": 0.10825114265095019,
+                "sadness": 0.04470772191484243,
+                "anxiety": 0,
+                "embarrassment": 0.08575896078903053,
+                "anger": 0.042804907385133505,
+                "sensitivity": 0.006013952369497233
+              }
+            },
+            "matchScore": 3,
+            "commonTopics": []
+          }
+        ],
+        "confidence": 45,
+        "timestamp": "2025-11-10T01:58:50.240Z"
+      }
+    ],
+    "memoryConsolidation": [
+      {
+        "patterns": [
+          "feeling affection (experienced 20 times)"
+        ],
+        "themes": [],
+        "timestamp": "2025-11-03T21:37:31.735Z",
+        "emotionalOverview": "Overall, you seem to experience affection quite often in our conversations."
+      }
+    ],
+    "dreamJournal": [],
+    "memoryTriggers": [],
+    "emotionalPatterns": [],
+    "lifeThemes": []
+  }
+}
