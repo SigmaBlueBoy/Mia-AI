@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mia - Interactive VRM Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #model-container {
+            flex: 1;
+            position: relative;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        #threejs-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+
+        #threejs-canvas:active {
+            cursor: grabbing;
+        }
+
+        #chat-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #message-input {
+            flex: 1;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            padding: 12px 20px;
+            outline: none;
+        }
+
+        #message-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #send-button {
+            background: #667eea;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        #send-button:hover {
+            background: #5a6fd8;
+        }
+
+        #instructions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 300px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        #instructions h3 {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        #instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #instructions li {
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #pet-toggle {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            background: rgba(255, 165, 0, 0.8);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #pet-toggle:hover {
+            background: rgba(255, 165, 0, 0.9);
+            transform: scale(1.05);
+        }
+
+        #pet-toggle.active {
+            background: rgba(255, 69, 0, 0.9);
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
+        }
+
+        #pet-mode-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 165, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: white;
+            display: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #pet-mode-indicator.active {
+            display: block;
+            background: rgba(255, 165, 0, 0.9);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 300px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .notification.error {
+            border-left: 4px solid #f44336;
+        }
+
+        #bone-test-panel {
+            position: absolute;
+            top: 60px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 11px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: auto;
+            z-index: 1000;
+        }
+
+        #bone-test-panel.active {
+            opacity: 1;
+        }
+
+        .bone-item {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bone-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bone-test-btn {
+            background: #667eea;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .bone-test-btn:hover {
+            background: #5a6fd8;
+        }
+
+        #bone-test-toggle {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            background: rgba(102, 126, 234, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="model-container">
+            <canvas id="threejs-canvas"></canvas>
+
+            <div id="instructions">
+                <h3>Controls</h3>
+                <ul>
+                    <li>🖱️ Right-click + drag: Rotate camera</li>
+                    <li>🔍 Scroll: Zoom in/out</li>
+                    <li>👆 Click on Mia: Interact with different parts</li>
+                    <li>💬 Type below to chat</li>
+                </ul>
+            </div>
+
+            <div id="notification" class="notification">
+                <div id="notification-text"></div>
+            </div>
+
+            <button id="bone-test-toggle">🦴</button>
+            <div id="bone-test-panel">
+                <div style="font-weight: bold; margin-bottom: 10px;">Bone Testing System</div>
+                <div id="bone-list"></div>
+            </div>
+
+            <div id="pet-mode-indicator">
+                🐱 Petting Mode - Click head to pet Mia!
+            </div>
+        </div>
+
+        <button id="pet-toggle">🐱 Pet Mode</button>
+
+        <div id="chat-container">
+            <input type="text" id="message-input" placeholder="Talk to Mia..." autocomplete="off">
+            <button id="send-button">→</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@1.0.9/lib/three-vrm.min.js"></script>
+    <script>
+        // Socket.io setup
+        const socket = io();
+
+        // DOM elements
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+
+        // Three.js setup
+        let scene, camera, renderer, controls, vrm;
+        let mixer, lipSyncAction, blinkAction, idleAction;
+        let raycaster, mouse;
+        let isInteracting = false;
+        let blinkTimer = 0;
+        let idleTimer = 0;
+        let boneTestTimer = 0;
+        let leftEyeBone = null;
+        let rightEyeBone = null;
+        let eyeBlinkTimer = 0;
+        let jiggleBones = [];
+        let jiggleTimer = 0;
+        let touchDeformation = null;
+        let deformationTimer = 0;
+        let breastJiggleTrigger = null;
+        let breastJiggleIntensity = 0;
+        let pettingMode = false;
+        let earJiggleTrigger = null;
+        let earJiggleIntensity = 0;
+        let lastPetTime = 0;
+        let isPetting = false;
+        let petStartTime = 0;
+        let continuousPetting = false;
+        let lookAroundTimer = 0;
+        let currentLookDirection = 0;
+        let isBlushing = false;
+        let blushTimer = 0;
+        let isLookingAtCamera = false;
+        let lookAtCameraTimer = 0;
+        let headBone = null;
+        let neckBone = null;
+        let targetHeadRotation = 0;
+        let currentHeadRotation = 0;
+        let headRotationSpeed = 0.015; // Even slower, more human-like
+        let headBobOffset = 0;
+        let headBobSpeed = 0.3;
+        let headBobAmount = 0.02;
+        let microExpressionTimer = 0;
+        let breathingTimer = 0;
+        let breathingAmount = 0.005;
+        let lastLookChange = 0;
+        let lookChangeInterval = 0; // Will be randomized
+        let bodySwayTimer = 0;
+        let bodySwayAmount = 0.01;
+        let postureShiftTimer = 0;
+        let currentPostureOffset = { x: 0, y: 0, z: 0 };
+        let targetPostureOffset = { x: 0, y: 0, z: 0 };
+        let hipsBone = null;
+        let leftArmBone = null;
+        let rightArmBone = null;
+        let bodyRotationSpeed = 0.008;
+        let currentBodyRotation = 0;
+        let targetBodyRotation = 0;
+        let allBones = [];
+        let boneTestMode = false;
+        let currentTestBone = null;
+        let testAnimationTime = 0;
+        let leftLegBone = null;
+        let rightLegBone = null;
+        let leftHandBone = null;
+        let rightHandBone = null;
+        let spineBone = null;
+        let chestBone = null;
+        let legMovementTimer = 0;
+        let handMovementTimer = 0;
+
+        function initThreeJS() {
+            console.log('Initializing Three.js...');
+
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = null; // Transparent background
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.2, 2.5);
+
+            // Renderer setup - improve quality
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('threejs-canvas'),
+                alpha: true,
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight - 100);
+            renderer.setClearColor(0x000000, 0); // Transparent
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Fix near/far clipping planes to prevent face clipping
+            camera.near = 0.001; // Ultra-close near plane to prevent any face clipping
+            camera.far = 1000; // Standard far plane
+            camera.updateProjectionMatrix();
+            renderer.outputEncoding = THREE.sRGBEncoding;
+
+            // Orbit controls - swapped: left for vertical, right for horizontal
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enablePan = false;
+            controls.enableZoom = true;
+            controls.enableRotate = true;
+            controls.minDistance = 1.5;
+            controls.maxDistance = 5;
+            controls.minDistance = 1.0; // Allow closer zoom to see details
+            controls.maxDistance = 8; // Allow farther zoom
+            controls.maxPolarAngle = Math.PI * 0.9; // Allow more vertical movement
+            controls.minPolarAngle = Math.PI * 0.05; // Prevent going too low
+            controls.minPolarAngle = 0; // Allow looking down to horizon and up
+            controls.mouseButtons = {
+                LEFT: THREE.MOUSE.ROTATE,    // Left mouse for vertical rotation (height control)
+                MIDDLE: THREE.MOUSE.DOLLY,   // Middle mouse for zoom
+                RIGHT: THREE.MOUSE.ROTATE    // Right mouse for horizontal rotation
+            };
+
+            // Reduced lighting to minimize glow effect
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+
+            // Raycaster for mouse interactions
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Load VRM model
+            loadVRMModel();
+
+            // Animation loop
+            animate();
+
+            // Event listeners
+            setupEventListeners();
+
+            console.log('Three.js initialized successfully');
+        }
+
+        function setupEventListeners() {
+            // Mouse events for interaction
+            renderer.domElement.addEventListener('mousedown', onMouseDown);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('mouseup', onMouseUp);
+            renderer.domElement.addEventListener('click', onMouseClick);
+
+            // Window resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onMouseDown(event) {
+            if (pettingMode && event.button === 0) { // Left mouse button
+                // Check if we're over the head for continuous petting
+                const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(scene.children, true);
+
+                if (intersects.length > 0) {
+                    const clickedObject = intersects[0].object;
+                    if (clickedObject.name && (clickedObject.name.toLowerCase().includes('head') || clickedObject.name.toLowerCase().includes('face'))) {
+                        isPetting = true;
+                        continuousPetting = true;
+                        petStartTime = Date.now();
+                        console.log('Started continuous petting!');
+                    }
+                }
+            }
+        }
+
+        function onMouseUp(event) {
+            if (event.button === 0) { // Left mouse button
+                isPetting = false;
+                continuousPetting = false;
+                console.log('Stopped continuous petting');
+            }
+        }
+
+        function onMouseClick(event) {
+            if (isInteracting) return;
+
+            // Calculate mouse position in normalized device coordinates
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            // Update the picking ray with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate objects intersecting the picking ray
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            if (intersects.length > 0) {
+                const clickedObject = intersects[0].object;
+                handleModelInteraction(clickedObject);
+            }
+        }
+
+        function onMouseMove(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            // Trigger ear jiggle when cursor moves over head/ear area during petting
+            if (pettingMode && isPetting && continuousPetting) {
+                // Check if cursor is over head or ear area
+                raycaster.setFromCamera(mouse, camera);
+                const intersects = raycaster.intersectObjects(scene.children, true);
+
+                if (intersects.length > 0) {
+                    const hoveredObject = intersects[0].object;
+                    if (hoveredObject.name) {
+                        const name = hoveredObject.name.toLowerCase();
+                        if (name.includes('head') || name.includes('face') || name.includes('ear') || name.includes('cat')) {
+                            // Trigger ear jiggle when cursor hits head OR ears directly
+                            triggerEarJiggle();
+                        }
+                    }
+                }
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / (window.innerHeight - 100);
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight - 100);
+        }
+
+        function handleModelInteraction(clickedObject) {
+            if (!vrm) return;
+
+            isInteracting = true;
+
+            // Determine which part was clicked based on the object's name or position
+            let interactionType = 'general';
+            let partName = 'body';
+
+            // Simple heuristic based on object name or position
+            if (clickedObject.name) {
+                const name = clickedObject.name.toLowerCase();
+                if (name.includes('head') || name.includes('face')) {
+                    interactionType = 'head';
+                    partName = 'head';
+                    // Trigger ear jiggle and blushing when petting head in pet mode
+                    if (pettingMode) {
+                        triggerEarJiggle();
+                        triggerBlushing();
+                        // Make Mia look away shyly when being petted
+                        lookAwayFromCamera();
+                        // Track petting for responses
+                        const now = Date.now();
+                        if (now - lastPetTime > 1000) { // Only count as new pet every second
+                            showNotification('Mia blushes and looks away shyly! 😊💕', 'success');
+                            lastPetTime = now;
+                        }
+                    }
+                } else if (name.includes('hand') || name.includes('arm')) {
+                    interactionType = 'hand';
+                    partName = 'hand';
+                } else if (name.includes('breast') || name.includes('boob') || name.includes('chest')) {
+                    interactionType = 'chest';
+                    partName = 'chest';
+                    // Trigger breast jiggle on touch
+                    triggerBreastJiggle();
+                } else if (name.includes('ear') || name.includes('cat')) {
+                    interactionType = 'ear';
+                    partName = 'ear';
+                    // Trigger ear jiggle when touching ears directly
+                    triggerEarJiggle();
+                    showNotification('You touched Mia\'s ear! 🐱', 'success');
+                } else if (name.includes('body') || name.includes('torso')) {
+                    interactionType = 'body';
+                    partName = 'body';
+                }
+            }
+
+            // Create touch deformation effect
+            createTouchDeformation(clickedObject);
+
+            // Get interaction response
+            const response = getInteractionResponse(interactionType, partName);
+
+            // Show notification
+            showNotification(`You touched Mia's ${partName}! ${response}`, 'success');
+
+            // Send interaction to server
+            socket.emit('model interaction', {
+                type: interactionType,
+                part: partName,
+                response: response
+            });
+
+            // Reset interaction flag after a short delay
+            setTimeout(() => {
+                isInteracting = false;
+            }, 1000);
+        }
+
+        function createTouchDeformation(clickedObject) {
+            // Create a temporary deformation effect on the clicked mesh
+            if (clickedObject.material) {
+                // Store original material properties
+                const originalScale = clickedObject.scale.clone();
+
+                // Create inward deformation effect with smooth transition
+                const deformation = {
+                    object: clickedObject,
+                    originalScale: originalScale,
+                    currentScale: originalScale.clone(),
+                    targetScale: originalScale.clone().multiplyScalar(0.95), // 5% smaller = pushed inward
+                    timer: 0,
+                    duration: 0.3, // 300ms deformation
+                    isDeforming: true
+                };
+
+                touchDeformation = deformation;
+            }
+        }
+
+        function updateTouchDeformation(deltaTime) {
+            if (touchDeformation) {
+                touchDeformation.timer += deltaTime;
+                const progress = Math.min(touchDeformation.timer / touchDeformation.duration, 1);
+
+                if (touchDeformation.isDeforming) {
+                    // Deforming inward
+                    if (progress < 0.5) {
+                        // First half: deform inward
+                        const deformProgress = progress * 2; // 0 to 1
+                        touchDeformation.currentScale.lerpVectors(
+                            touchDeformation.originalScale,
+                            touchDeformation.targetScale,
+                            deformProgress
+                        );
+                        touchDeformation.object.scale.copy(touchDeformation.currentScale);
+                    } else {
+                        // Second half: hold deformed
+                        touchDeformation.object.scale.copy(touchDeformation.targetScale);
+                    }
+
+                    if (progress >= 1) {
+                        touchDeformation.isDeforming = false;
+                        touchDeformation.timer = 0;
+                    }
+                } else {
+                    // Returning to normal
+                    const returnProgress = touchDeformation.timer / touchDeformation.duration;
+                    touchDeformation.currentScale.lerpVectors(
+                        touchDeformation.targetScale,
+                        touchDeformation.originalScale,
+                        returnProgress
+                    );
+                    touchDeformation.object.scale.copy(touchDeformation.currentScale);
+
+                    if (returnProgress >= 1) {
+                        touchDeformation.object.scale.copy(touchDeformation.originalScale);
+                        touchDeformation = null;
+                    }
+                }
+            }
+        }
+
+        function triggerBreastJiggle() {
+            // Trigger extra jiggle intensity for breast bones
+            breastJiggleIntensity = 1.0; // Full intensity trigger
+            breastJiggleTrigger = Date.now();
+
+            console.log('Breast jiggle triggered!');
+        }
+
+        function triggerEarJiggle() {
+            // Trigger extra jiggle intensity for ear bones when petting head
+            // Reset the timer to restart the jiggle duration
+            earJiggleIntensity = 1.0; // Full intensity trigger
+            earJiggleTrigger = Date.now();
+
+            console.log('Ear jiggle triggered/restarted from petting!');
+        }
+
+        function triggerBlushing() {
+            // Trigger blushing expression when being petted with smooth transition
+            if (vrm && vrm.expressionManager) {
+                // Try to find and activate blush expression
+                const expressions = vrm.expressionManager.expressions;
+                const blushExpr = expressions.find(e => e.expressionName.toLowerCase().includes('blush') ||
+                                                       e.expressionName.toLowerCase().includes('shy') ||
+                                                       e.expressionName.toLowerCase().includes('embarrass'));
+
+                if (blushExpr) {
+                    console.log('Activating blush expression:', blushExpr.expressionName);
+                    // Smooth transition to full blush
+                    smoothExpressionTransition(blushExpr, 1.0, 0.5); // 0.5 second transition
+                    isBlushing = true;
+                    blushTimer = Date.now();
+                } else {
+                    console.log('No blush expression found, trying generic happy/shy expression');
+                    // Fallback: try to find any positive expression
+                    const happyExpr = expressions.find(e => e.expressionName.toLowerCase().includes('happy') ||
+                                                          e.expressionName.toLowerCase().includes('smile'));
+                    if (happyExpr) {
+                        smoothExpressionTransition(happyExpr, 0.7, 0.3);
+                        isBlushing = true;
+                        blushTimer = Date.now();
+                    }
+                }
+            }
+        }
+
+        function smoothExpressionTransition(expression, targetWeight, duration) {
+            // Create smooth transition for expression weight
+            const startWeight = expression.weight || 0;
+            const startTime = Date.now();
+
+            const transition = {
+                expression: expression,
+                startWeight: startWeight,
+                targetWeight: targetWeight,
+                duration: duration * 1000, // Convert to milliseconds
+                startTime: startTime,
+                active: true
+            };
+
+            // Add to active transitions
+            if (!window.expressionTransitions) window.expressionTransitions = [];
+            window.expressionTransitions.push(transition);
+        }
+
+        function updateExpressionTransitions(deltaTime) {
+            if (!window.expressionTransitions) return;
+
+            window.expressionTransitions = window.expressionTransitions.filter(transition => {
+                if (!transition.active) return false;
+
+                const elapsed = Date.now() - transition.startTime;
+                const progress = Math.min(elapsed / transition.duration, 1);
+
+                // Smooth easing function (ease-out)
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+                transition.expression.weight = transition.startWeight +
+                    (transition.targetWeight - transition.startWeight) * easedProgress;
+
+                if (progress >= 1) {
+                    transition.expression.weight = transition.targetWeight;
+                    transition.active = false;
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        function lookAwayFromCamera() {
+            // Make Mia look away shyly when being petted
+            if (headBone) {
+                // Turn head slightly away (random left or right) with smooth transition
+                const awayDirection = Math.random() > 0.5 ? 0.3 : -0.3; // 0.3 radians ≈ 17 degrees
+                targetHeadRotation = awayDirection;
+                console.log('Mia looking away shyly (smooth transition)');
+            }
+        }
+
+        function lookAtCamera() {
+            // Make Mia look directly at camera when chatting with smooth transition
+            if (headBone) {
+                // Reset head rotation to look at camera
+                targetHeadRotation = 0;
+                isLookingAtCamera = true;
+                lookAtCameraTimer = Date.now();
+                console.log('Mia looking at camera (smooth transition)');
+            }
+        }
+
+        function autonomousLookAround() {
+            // More human-like looking around with varied timing and natural pauses
+            if (headBone && !isPetting && !isLookingAtCamera) {
+                const currentTime = Date.now() / 1000; // Convert to seconds
+
+                // Initialize look change interval if not set
+                if (lookChangeInterval === 0) {
+                    lookChangeInterval = 4 + Math.random() * 6; // 4-10 seconds
+                }
+
+                // Change look direction with more natural timing
+                if (currentTime - lastLookChange > lookChangeInterval) {
+                    // Sometimes just make small adjustments, sometimes bigger changes
+                    const changeType = Math.random();
+                    if (changeType < 0.3) {
+                        // Small adjustment (30% chance)
+                        targetHeadRotation += (Math.random() - 0.5) * 0.2;
+                        targetHeadRotation = Math.max(-0.6, Math.min(0.6, targetHeadRotation)); // Keep in reasonable range
+                    } else if (changeType < 0.7) {
+                        // Medium change (40% chance)
+                        const directions = [-0.4, -0.2, 0, 0.2, 0.4];
+                        targetHeadRotation = directions[Math.floor(Math.random() * directions.length)];
+                    } else {
+                        // Large change (30% chance)
+                        targetHeadRotation = (Math.random() - 0.5) * 1.0;
+                    }
+
+                    lastLookChange = currentTime;
+                    lookChangeInterval = 3 + Math.random() * 7; // 3-10 seconds for next change
+                    console.log('Mia looking around naturally');
+                }
+
+                // Occasionally pause and look straight ahead
+                if (Math.random() < 0.001) { // 0.1% chance per frame
+                    targetHeadRotation = 0;
+                    lookChangeInterval = 2 + Math.random() * 3; // Short pause
+                    console.log('Mia pausing to look straight ahead');
+                }
+            }
+        }
+
+        function updateHeadRotation() {
+            // Continuous subtle head movement (breathing-like) - never stops
+            if (headBone) {
+                const time = Date.now() * 0.001;
+
+                // Very subtle breathing head movement - never stops
+                const breathingMovement = Math.sin(time * 0.3) * 0.02; // Very gentle, slow
+                const microMovement = Math.sin(time * 0.8) * 0.01; // Tiny random movements
+
+                // Combine movements but keep them very restrained
+                headBone.rotation.x = breathingMovement + microMovement;
+
+                // Subtle head sway (side to side, not too much)
+                const swayAmount = Math.sin(time * 0.2) * 0.015; // Reduced from 0.03
+                headBone.rotation.z = swayAmount;
+
+                // Occasional small head turns (but not extreme)
+                const occasionalTurn = Math.sin(time * 0.1) * 0.02; // Very slow, small turns
+                headBone.rotation.y = occasionalTurn;
+            }
+        }
+
+        function updateBodySway() {
+            // Natural body sway and weight shifting
+            bodySwayTimer += 0.016;
+
+            if (hipsBone) {
+                // Subtle hip sway for natural standing posture
+                const swayX = Math.sin(bodySwayTimer * 0.2) * bodySwayAmount;
+                const swayZ = Math.cos(bodySwayTimer * 0.15) * bodySwayAmount * 0.5;
+
+                hipsBone.rotation.x = swayX;
+                hipsBone.rotation.z = swayZ;
+            }
+
+            // Body rotation for natural posture variation
+            if (Math.abs(targetBodyRotation - currentBodyRotation) > 0.0001) {
+                currentBodyRotation += (targetBodyRotation - currentBodyRotation) * 0.05;
+
+                if (hipsBone) {
+                    hipsBone.rotation.y = currentBodyRotation;
+                }
+            }
+        }
+
+        function updateArmMovement() {
+            // Natural arm movement for relaxed standing posture
+            if (leftArmBone && rightArmBone) {
+                const time = Date.now() * 0.001;
+
+                // Subtle arm sway - increased for visibility
+                const armSway = Math.sin(time * 0.3) * 0.05; // Increased from 0.02
+
+                leftArmBone.rotation.x = armSway * 2.0; // Increased from 0.5
+                leftArmBone.rotation.z = armSway * 1.5; // Increased from 0.3
+
+                rightArmBone.rotation.x = -armSway * 2.0; // Increased from 0.5
+                rightArmBone.rotation.z = -armSway * 1.5; // Increased from 0.3
+
+                console.log('Arm movement active:', leftArmBone.rotation.x, rightArmBone.rotation.x);
+            }
+
+            // Natural hand and finger movement
+            updateHandMovement();
+        }
+
+        function updateHandMovement() {
+            handMovementTimer += 0.016;
+
+            if (leftHandBone && rightHandBone) {
+                // Subtle hand gestures - very slight movements
+                const handSway = Math.sin(handMovementTimer * 0.5) * 0.01;
+
+                leftHandBone.rotation.z = handSway * 0.3;
+                leftHandBone.rotation.x = handSway * 0.1;
+
+                rightHandBone.rotation.z = -handSway * 0.3;
+                rightHandBone.rotation.x = -handSway * 0.1;
+            }
+        }
+
+        function updateLegMovement() {
+            // Natural leg movement for standing balance
+            legMovementTimer += 0.016;
+
+            if (leftLegBone && rightLegBone) {
+                // Very subtle leg sway for natural balance
+                const legSway = Math.sin(legMovementTimer * 0.4) * 0.005;
+
+                // Apply more visible movement for testing
+                leftLegBone.rotation.x = legSway * 2.0; // Increased from 0.2
+                leftLegBone.rotation.z = legSway * 1.0; // Increased from 0.1
+
+                rightLegBone.rotation.x = -legSway * 2.0; // Increased from 0.2
+                rightLegBone.rotation.z = -legSway * 1.0; // Increased from 0.1
+
+                console.log('Leg movement active:', leftLegBone.rotation.x, rightLegBone.rotation.x);
+            }
+        }
+
+        function updateSpineMovement() {
+            // Natural spine movement for breathing and posture
+            if (spineBone) {
+                const time = Date.now() * 0.001;
+
+                // Subtle spine curvature changes
+                const spineCurve = Math.sin(time * 0.2) * 0.01;
+                spineBone.rotation.x = spineCurve;
+
+                // Breathing effect on spine
+                const breathingEffect = Math.sin(time * 0.3) * 0.003;
+                spineBone.position.y = breathingEffect;
+            }
+        }
+
+        function updateChestMovement() {
+            // Enhanced breathing with chest bone
+            if (chestBone) {
+                const time = Date.now() * 0.001;
+
+                // More pronounced breathing on chest
+                const chestBreathing = Math.sin(time * 0.3) * breathingAmount * 1.5;
+                chestBone.scale.x = 1 + chestBreathing * 0.1;
+                chestBone.scale.y = 1 + chestBreathing * 0.05;
+                chestBone.scale.z = 1 + chestBreathing * 0.1;
+            }
+        }
+
+        function updatePostureShifts() {
+            // Occasional natural posture changes
+            postureShiftTimer += 0.016;
+
+            if (postureShiftTimer > 8 + Math.random() * 12) { // Every 8-20 seconds
+                // Generate new target posture
+                targetPostureOffset.x = (Math.random() - 0.5) * 0.03; // Small lean left/right
+                targetPostureOffset.y = (Math.random() - 0.5) * 0.02; // Small height variation
+                targetPostureOffset.z = (Math.random() - 0.5) * 0.02; // Small forward/back lean
+
+                targetBodyRotation = (Math.random() - 0.5) * 0.1; // Small body rotation
+
+                postureShiftTimer = 0;
+                console.log('Mia shifting posture naturally');
+            }
+
+            // Smoothly interpolate to new posture
+            if (hipsBone) {
+                const easeFactor = 0.02;
+                currentPostureOffset.x += (targetPostureOffset.x - currentPostureOffset.x) * easeFactor;
+                currentPostureOffset.y += (targetPostureOffset.y - currentPostureOffset.y) * easeFactor;
+                currentPostureOffset.z += (targetPostureOffset.z - currentPostureOffset.z) * easeFactor;
+
+                hipsBone.position.x = currentPostureOffset.x;
+                hipsBone.position.y = currentPostureOffset.y;
+                hipsBone.position.z = currentPostureOffset.z;
+            }
+        }
+
+        function updateBreathing() {
+            // Natural breathing movement using chest/spine bones
+            if (neckBone || (vrm && vrm.humanoid)) {
+                breathingTimer += 0.016;
+
+                // Find chest/spine bones for breathing
+                let chestBone = neckBone; // Fallback to neck
+                if (vrm && vrm.humanoid) {
+                    const spine = vrm.humanoid.getNormalizedBoneNode('spine');
+                    const chest = vrm.humanoid.getNormalizedBoneNode('chest');
+                    chestBone = chest || spine || neckBone;
+                }
+
+                if (chestBone) {
+                    // Natural breathing: slow rise and fall
+                    const breathCycle = Math.sin(breathingTimer * 0.3) * breathingAmount; // Slow breathing
+                    chestBone.position.y += breathCycle * 0.01; // Subtle chest movement
+
+                    // Also add subtle scale breathing effect
+                    const breathScale = 1 + (breathCycle * 0.002);
+                    chestBone.scale.y = breathScale;
+                }
+            }
+        }
+
+        function updateMicroExpressions() {
+            // Add subtle, random micro-expressions for more life-like appearance
+            microExpressionTimer += 0.016;
+
+            if (microExpressionTimer > 2 + Math.random() * 3) { // Every 2-5 seconds
+                if (vrm && vrm.expressionManager && !isBlushing) {
+                    const expressions = vrm.expressionManager.expressions;
+                    const subtleExpressions = expressions.filter(e =>
+                        e.expressionName.toLowerCase().includes('happy') ||
+                        e.expressionName.toLowerCase().includes('smile') ||
+                        e.expressionName.toLowerCase().includes('relaxed') ||
+                        e.expressionName.toLowerCase().includes('neutral')
+                    );
+
+                    if (subtleExpressions.length > 0) {
+                        const randomExpr = subtleExpressions[Math.floor(Math.random() * subtleExpressions.length)];
+                        // Very subtle expression change
+                        smoothExpressionTransition(randomExpr, 0.1 + Math.random() * 0.2, 0.5);
+                        setTimeout(() => {
+                            smoothExpressionTransition(randomExpr, 0, 1.0);
+                        }, 1000 + Math.random() * 2000); // Hold for 1-3 seconds
+                    }
+                }
+                microExpressionTimer = 0;
+            }
+        }
+
+        function togglePetMode() {
+            pettingMode = !pettingMode;
+            const petToggle = document.getElementById('pet-toggle');
+            const petIndicator = document.getElementById('pet-mode-indicator');
+
+            if (pettingMode) {
+                petToggle.classList.add('active');
+                petToggle.textContent = '🐱 Exit Pet Mode';
+                petIndicator.classList.add('active');
+                // Disable left-click camera controls in pet mode
+                if (controls) {
+                    controls.mouseButtons = {
+                        LEFT: null,    // Disable left-click for camera
+                        MIDDLE: THREE.MOUSE.DOLLY,   // Middle mouse for zoom
+                        RIGHT: THREE.MOUSE.ROTATE    // Right mouse for horizontal rotation
+                    };
+                }
+                showNotification('Petting mode activated! Hold left-click and move over Mia\'s head to pet her continuously. 💕', 'success');
+            } else {
+                petToggle.classList.remove('active');
+                petToggle.textContent = '🐱 Pet Mode';
+                petIndicator.classList.remove('active');
+                // Restore normal camera controls
+                if (controls) {
+                    controls.mouseButtons = {
+                        LEFT: THREE.MOUSE.ROTATE,    // Left mouse for vertical rotation (height control)
+                        MIDDLE: THREE.MOUSE.DOLLY,   // Middle mouse for zoom
+                        RIGHT: THREE.MOUSE.ROTATE    // Right mouse for horizontal rotation
+                    };
+                }
+                // Stop any continuous petting
+                isPetting = false;
+                continuousPetting = false;
+                showNotification('Petting mode deactivated.', 'info');
+            }
+        }
+
+        function getInteractionResponse(type, part) {
+            const responses = {
+                head: [
+                    "Hey! That's my face! 😊",
+                    "My head feels tingly! ✨",
+                    "Don't mess up my hair! 💇‍♀️",
+                    "That tickles! 😄"
+                ],
+                hand: [
+                    "Holding hands? How sweet! 💕",
+                    "My hand is warm, right? 🌸",
+                    "Let me squeeze back! 🤝",
+                    "Such gentle touch! 💖"
+                ],
+                chest: [
+                    "That's my heart area! 💓",
+                    "Feeling my heartbeat? 💓",
+                    "You're making me blush! 😳",
+                    "That's a sensitive spot! 💕"
+                ],
+                ear: [
+                    "My ears are sensitive! 🐱",
+                    "That tickles my ears! 😺",
+                    "Ears... my weak spot! 💕",
+                    "You're making my ears twitch! 🐱✨"
+                ],
+                general: [
+                    "Hi there! 👋",
+                    "That feels nice! 😊",
+                    "You're touching me! 💕",
+                    "I like that! 🌟"
+                ]
+            };
+
+            const typeResponses = responses[type] || responses.general;
+            return typeResponses[Math.floor(Math.random() * typeResponses.length)];
+        }
+
+        function loadVRMModel() {
+            console.log('Loading VRM model...');
+            try {
+                const loader = new THREE.GLTFLoader();
+                loader.register((parser) => new THREE_VRM.VRMLoaderPlugin(parser));
+
+                loader.load('/models/Mia.vrm',
+                    (gltf) => {
+                        console.log('VRM loaded successfully:', gltf);
+                        vrm = gltf.userData.vrm;
+                        scene.add(vrm.scene);
+
+                        // Position and scale the model
+                        vrm.scene.position.set(0, -0.5, 0);
+                        vrm.scene.scale.set(1, 1, 1);
+
+                        // Enable shadows and reduce material emissiveness on VRM model
+                        vrm.scene.traverse((child) => {
+                            if (child.isMesh) {
+                                child.castShadow = true;
+                                child.receiveShadow = true;
+
+                                // Reduce emissive/glow effect if material has emissive properties
+                                if (child.material) {
+                                    if (child.material.emissive) {
+                                        child.material.emissive.multiplyScalar(0.3); // Reduce emissive glow
+                                    }
+                                    if (child.material.emissiveMap) {
+                                        child.material.emissiveMap = null; // Remove emissive maps
+                                    }
+                                }
+                            }
+                        });
+
+                        // Setup animations
+                        setupLipSync();
+                        setupBlinking();
+                        setupIdleAnimation();
+
+                        // Make model parts interactive
+                        makeModelInteractive();
+
+                        console.log('VRM model loaded and positioned successfully');
+                        showNotification('Mia loaded successfully! 💕', 'success');
+
+                        // Initialize bone testing system
+                        initializeBoneTesting();
+
+                        // Debug: Check VRM structure
+                        console.log('VRM humanoid bones:', vrm.humanoid ? 'Available' : 'Not available');
+                        if (vrm.humanoid) {
+                            console.log('Available bones:', Object.keys(vrm.humanoid.normalizedHumanBones));
+                            const headBone = vrm.humanoid.getNormalizedBoneNode('head');
+                            const spineBone = vrm.humanoid.getNormalizedBoneNode('spine');
+                            console.log('Head bone object:', headBone);
+                            console.log('Spine bone object:', spineBone);
+                        }
+                        console.log('VRM expressions:', vrm.expressionManager ? 'Available' : 'Not available');
+                        if (vrm.expressionManager) {
+                            console.log('Available expressions:', vrm.expressionManager.expressions.map(e => e.expressionName));
+                        }
+
+                        // Check scene structure and find upper torso bones
+                        console.log('VRM scene children:', vrm.scene.children.length);
+                        let boneCount = 0;
+                        let upperTorsoBones = [];
+                        vrm.scene.traverse((child) => {
+                            if (child.isBone) {
+                                boneCount++;
+                                const name = child.name.toLowerCase();
+
+                                // Look for upper torso/chest bones
+                                if (name.includes('chest') || name.includes('torso') || name.includes('spine') ||
+                                    name.includes('upper') || name.includes('body')) {
+                                    upperTorsoBones.push(child.name);
+                                }
+
+                                if (boneCount <= 15) { // Show more bones for analysis
+                                    console.log('Found bone:', child.name, '- Position:', child.position);
+                                }
+                            }
+                        });
+                        console.log('Total bones found:', boneCount);
+                        console.log('Upper torso bones found:', upperTorsoBones);
+
+                        // Test jiggle bones by forcing a visible movement
+                        setTimeout(() => {
+                            console.log('=== JIGGLE BONES TEST ===');
+                            jiggleBones.forEach((jiggleBone, index) => {
+                                console.log(`${index + 1}. ${jiggleBone.type.toUpperCase()} bone: ${jiggleBone.bone.name}`);
+                                console.log(`   Position: (${jiggleBone.bone.position.x.toFixed(3)}, ${jiggleBone.bone.position.y.toFixed(3)}, ${jiggleBone.bone.position.z.toFixed(3)})`);
+                                console.log(`   Original: (${jiggleBone.originalPosition.x.toFixed(3)}, ${jiggleBone.originalPosition.y.toFixed(3)}, ${jiggleBone.originalPosition.z.toFixed(3)})`);
+
+                                // Force visible test movement
+                                jiggleBone.bone.position.y = jiggleBone.originalPosition.y + 0.1; // Move up for testing
+                                setTimeout(() => {
+                                    jiggleBone.bone.position.y = jiggleBone.originalPosition.y; // Reset
+                                }, 1000);
+                            });
+                            console.log(`Found ${jiggleBones.length} bones with jiggle physics`);
+                        }, 2000);
+
+                        // Find ALL bones for comprehensive testing and animation
+                        vrm.scene.traverse((child) => {
+                            if (child.isBone) {
+                                allBones.push(child);
+                                const name = child.name.toLowerCase();
+
+                                // Find head, neck, and body bones for full body movement
+                                if (!headBone && (name.includes('head') && !name.includes('hair') && !name.includes('ear'))) {
+                                    headBone = child;
+                                    console.log('Found head bone for autonomous behavior:', headBone.name);
+                                }
+                                if (!neckBone && (name.includes('neck') || name.includes('spine') && name.includes('upper'))) {
+                                    neckBone = child;
+                                    console.log('Found neck bone for autonomous behavior:', neckBone.name);
+                                }
+                                if (!hipsBone && (name.includes('hips') || name.includes('pelvis') || (name.includes('spine') && name.includes('lower')))) {
+                                    hipsBone = child;
+                                    console.log('Found hips bone for body movement:', hipsBone.name);
+                                }
+                                if (!leftArmBone && ((name.includes('arm') && name.includes('left')) || (name.includes('shoulder') && name.includes('left')))) {
+                                    leftArmBone = child;
+                                    console.log('Found left arm bone for natural movement:', leftArmBone.name);
+                                }
+                                if (!rightArmBone && ((name.includes('arm') && name.includes('right')) || (name.includes('shoulder') && name.includes('right')))) {
+                                    rightArmBone = child;
+                                    console.log('Found right arm bone for natural movement:', rightArmBone.name);
+                                }
+
+                                // Find additional bones for more comprehensive animation
+                                if (!leftLegBone && ((name.includes('leg') && name.includes('left')) || (name.includes('thigh') && name.includes('left')))) {
+                                    leftLegBone = child;
+                                    console.log('Found left leg bone:', leftLegBone.name);
+                                }
+                                if (!rightLegBone && ((name.includes('leg') && name.includes('right')) || (name.includes('thigh') && name.includes('right')))) {
+                                    rightLegBone = child;
+                                    console.log('Found right leg bone:', rightLegBone.name);
+                                }
+                                if (!leftHandBone && (name.includes('hand') && name.includes('left'))) {
+                                    leftHandBone = child;
+                                    console.log('Found left hand bone:', leftHandBone.name);
+                                }
+                                if (!rightHandBone && (name.includes('hand') && name.includes('right'))) {
+                                    rightHandBone = child;
+                                    console.log('Found right hand bone:', rightHandBone.name);
+                                }
+                                if (!spineBone && (name.includes('spine') && !name.includes('upper') && !name.includes('lower'))) {
+                                    spineBone = child;
+                                    console.log('Found spine bone:', spineBone.name);
+                                }
+                                if (!chestBone && (name.includes('chest') || name.includes('sternum'))) {
+                                    chestBone = child;
+                                    console.log('Found chest bone:', chestBone.name);
+                                }
+
+                                // Find eye bones for blinking - try different naming patterns
+                                if (!leftEyeBone) {
+                                    if (name.includes('eye') && (name.includes('l') || name.includes('left'))) {
+                                        leftEyeBone = child;
+                                        console.log('Found left eye bone:', leftEyeBone.name);
+                                    } else if (name.includes('eyelid') && (name.includes('l') || name.includes('left'))) {
+                                        leftEyeBone = child;
+                                        console.log('Found left eyelid bone:', leftEyeBone.name);
+                                    } else if (name.includes('pupil') && (name.includes('l') || name.includes('left'))) {
+                                        leftEyeBone = child;
+                                        console.log('Found left pupil bone:', leftEyeBone.name);
+                                    }
+                                }
+                                if (!rightEyeBone) {
+                                    if (name.includes('eye') && (name.includes('r') || name.includes('right'))) {
+                                        rightEyeBone = child;
+                                        console.log('Found right eye bone:', rightEyeBone.name);
+                                    } else if (name.includes('eyelid') && (name.includes('r') || name.includes('right'))) {
+                                        rightEyeBone = child;
+                                        console.log('Found right eyelid bone:', rightEyeBone.name);
+                                    } else if (name.includes('pupil') && (name.includes('r') || name.includes('right'))) {
+                                        rightEyeBone = child;
+                                        console.log('Found right pupil bone:', rightEyeBone.name);
+                                    }
+                                }
+
+                                // Find bones for jiggle physics - very specific detection
+                                let jiggleIntensity = 0.02 + Math.random() * 0.03;
+                                let jiggleFrequency = 2 + Math.random() * 4;
+
+                                if (name.includes('hair')) {
+                                    // Hair bones - increase intensity and frequency for more visible movement
+                                    jiggleBones.push({
+                                        bone: child,
+                                        originalPosition: child.position.clone(),
+                                        originalRotation: child.rotation.clone(),
+                                        jiggleAmount: jiggleIntensity * 2.0, // Much more intense for hair
+                                        frequency: jiggleFrequency * 1.5, // Faster for more dynamic hair
+                                        type: 'hair'
+                                    });
+                                    console.log('Added hair jiggle bone:', child.name);
+                                } else if (name.includes('tail')) {
+                                    // Tail bones - increase intensity for more visible movement
+                                    jiggleBones.push({
+                                        bone: child,
+                                        originalPosition: child.position.clone(),
+                                        originalRotation: child.rotation.clone(),
+                                        jiggleAmount: jiggleIntensity * 2.5, // Much more intense for tail
+                                        frequency: jiggleFrequency * 1.2, // Slightly faster
+                                        type: 'tail'
+                                    });
+                                    console.log('Added tail jiggle bone:', child.name);
+                                } else if (name.includes('ear')) {
+                                    jiggleBones.push({
+                                        bone: child,
+                                        originalPosition: child.position.clone(),
+                                        originalRotation: child.rotation.clone(),
+                                        jiggleAmount: jiggleIntensity * 0.3, // Keep subtle for ears
+                                        frequency: jiggleFrequency * 1.5,
+                                        type: 'ear'
+                                    });
+                                    console.log('Added ear jiggle bone:', child.name);
+                                } else if ((name.includes('breast') || name.includes('boob')) &&
+                                          (name.includes('l') || name.includes('r') || name.includes('left') || name.includes('right'))) {
+                                    // Only individual breast bones (left/right), not general chest
+                                    jiggleBones.push({
+                                        bone: child,
+                                        originalPosition: child.position.clone(),
+                                        originalRotation: child.rotation.clone(),
+                                        jiggleAmount: jiggleIntensity * 1.5, // More intense for visible breast movement
+                                        frequency: jiggleFrequency * 1.0,
+                                        type: 'breast'
+                                    });
+                                    console.log('Added breast jiggle bone:', child.name);
+                                // Removed chest detection completely to avoid torso jiggle
+                            }
+                            }
+                        });
+
+                        console.log('Found', jiggleBones.length, 'bones for jiggle physics');
+                    },
+                    (progress) => {
+                        console.log('VRM loading progress:', progress);
+                        showNotification(`Loading Mia... ${Math.round(progress.loaded / progress.total * 100)}%`, 'info');
+                    },
+                    (error) => {
+                        console.error('Error loading VRM model:', error);
+                        console.log('Falling back to simple model');
+                        showNotification('VRM failed to load, using fallback model', 'error');
+                        createFallbackModel();
+                    }
+                );
+            } catch (error) {
+                console.error('Error in loadVRMModel:', error);
+                console.log('Falling back to simple model');
+                showNotification('Error loading VRM, using fallback model', 'error');
+                createFallbackModel();
+            }
+        }
+
+        function makeModelInteractive() {
+            if (!vrm) return;
+
+            // Traverse the VRM scene and make objects interactive
+            vrm.scene.traverse((child) => {
+                if (child.isMesh) {
+                    child.userData.interactive = true;
+                }
+            });
+        }
+
+        function createFallbackModel() {
+            console.log('Creating fallback fox model');
+            const geometry = new THREE.CapsuleGeometry(0.3, 0.8, 4, 8);
+            const material = new THREE.MeshLambertMaterial({ color: 0xffd700 });
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, 0, 0);
+            mesh.userData.interactive = true;
+            scene.add(mesh);
+
+            // Add ears
+            const earGeometry = new THREE.ConeGeometry(0.1, 0.3, 8);
+            const earMaterial = new THREE.MeshLambertMaterial({ color: 0xffd700 });
+
+            const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+            leftEar.position.set(-0.15, 0.6, 0);
+            leftEar.userData.interactive = true;
+            mesh.add(leftEar);
+
+            const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+            rightEar.position.set(0.15, 0.6, 0);
+            rightEar.userData.interactive = true;
+            mesh.add(rightEar);
+
+            console.log('Fallback model created');
+        }
+
+        function setupLipSync() {
+            if (!vrm) {
+                console.log('VRM not available for lip sync setup');
+                return;
+            }
+
+            console.log('Setting up lip sync...');
+            try {
+                const mouthBlendShape = vrm.expressionManager.getExpressionTrackName('mouth');
+                if (mouthBlendShape) {
+                    console.log('Found mouth blend shape:', mouthBlendShape);
+                    const lipSyncTrack = new THREE.NumberKeyframeTrack(
+                        `${mouthBlendShape}.weight`,
+                        [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+                        [0, 0.3, 0.6, 0.3, 0.1, 0]
+                    );
+
+                    const lipSyncClip = new THREE.AnimationClip('lipSync', 0.5, [lipSyncTrack]);
+                    if (!mixer) {
+                        mixer = new THREE.AnimationMixer(vrm.scene);
+                    }
+                    lipSyncAction = mixer.clipAction(lipSyncClip);
+                    console.log('Lip sync setup complete');
+                } else {
+                    console.log('No mouth blend shape found');
+                }
+            } catch (error) {
+                console.error('Error setting up lip sync:', error);
+            }
+        }
+
+        function setupBlinking() {
+            if (!vrm) {
+                console.log('VRM not available for blinking setup');
+                return;
+            }
+
+            console.log('Setting up blinking...');
+            try {
+                // Check available expressions
+                console.log('Available expressions:', vrm.expressionManager.expressions.map(e => e.expressionName));
+
+                // Try different blink expression names
+                const blinkExpressions = ['blink', 'blinkLeft', 'blinkRight', 'wink', 'eyeBlink'];
+                let blinkExpression = null;
+
+                for (const expr of blinkExpressions) {
+                    blinkExpression = vrm.expressionManager.getExpressionTrackName(expr);
+                    if (blinkExpression) {
+                        console.log('Found blink expression track:', blinkExpression);
+                        break;
+                    }
+                }
+
+                if (blinkExpression) {
+                    console.log('Setting up blink animation with expression:', blinkExpression);
+                    // Create blink animation: closed for 0.1s, then open
+                    const blinkTrack = new THREE.NumberKeyframeTrack(
+                        blinkExpression,
+                        [0, 0.05, 0.15, 0.2],
+                        [0, 1, 1, 0]
+                    );
+
+                    const blinkClip = new THREE.AnimationClip('blink', 0.2, [blinkTrack]);
+                    if (!mixer) {
+                        mixer = new THREE.AnimationMixer(vrm.scene);
+                    }
+                    blinkAction = mixer.clipAction(blinkClip);
+                    blinkAction.loop = THREE.LoopRepeat;
+                    blinkAction.clampWhenFinished = true;
+                    console.log('Blinking setup complete');
+                } else {
+                    console.log('No blink expression found, trying manual eyelid control');
+                    // Fallback: manually control eyelid bones if available
+                    setupManualBlinking();
+                }
+            } catch (error) {
+                console.error('Error setting up blinking:', error);
+                setupManualBlinking();
+            }
+        }
+
+        function setupManualBlinking() {
+            console.log('Setting up manual blinking with bones...');
+            // This would require accessing specific bones in the VRM skeleton
+            // For now, we'll use a timer-based approach
+        }
+
+        function setupIdleAnimation() {
+            if (!vrm) {
+                console.log('VRM not available for idle animation setup');
+                return;
+            }
+
+            console.log('Setting up idle animation...');
+            try {
+                // Check if humanoid bones are available
+                if (!vrm.humanoid) {
+                    console.log('No humanoid bones available, trying manual bone access');
+                    setupManualIdleAnimation();
+                    return;
+                }
+
+                // Create subtle breathing and head movement animation
+                const headBone = vrm.humanoid.getNormalizedBoneNode('head');
+                const spineBone = vrm.humanoid.getNormalizedBoneNode('spine');
+
+                console.log('Head bone:', headBone ? headBone.name : 'Not found');
+                console.log('Spine bone:', spineBone ? spineBone.name : 'Not found');
+
+                if (headBone || spineBone) {
+                    const tracks = [];
+
+                    // Head subtle movement - use Euler angles with proper order
+                    if (headBone) {
+                        console.log('Setting up head movement animation');
+                        const headRotationTrack = new THREE.VectorKeyframeTrack(
+                            `${headBone.name}.rotation[x]`,
+                            [0, 2, 4, 6, 8],
+                            [0, 0, 0, 0, 0] // X rotation only for subtle head tilt
+                        );
+                        tracks.push(headRotationTrack);
+                    }
+
+                    // Spine breathing motion
+                    if (spineBone) {
+                        console.log('Setting up spine breathing animation');
+                        const spinePositionTrack = new THREE.VectorKeyframeTrack(
+                            `${spineBone.name}.position`,
+                            [0, 1, 2, 3, 4],
+                            [
+                                0, 0, 0, // neutral
+                                0, 0.01, 0, // slight rise (inhale)
+                                0, 0, 0, // neutral
+                                0, -0.005, 0, // slight fall (exhale)
+                                0, 0, 0 // back to neutral
+                            ]
+                        );
+                        tracks.push(spinePositionTrack);
+                    }
+
+                    if (tracks.length > 0) {
+                        const idleClip = new THREE.AnimationClip('idle', 8, tracks);
+                        if (!mixer) {
+                            mixer = new THREE.AnimationMixer(vrm.scene);
+                        }
+                        idleAction = mixer.clipAction(idleClip);
+                        idleAction.loop = THREE.LoopRepeat;
+                        idleAction.play();
+                        console.log('Idle animation setup complete with', tracks.length, 'tracks');
+                    }
+                } else {
+                    console.log('No suitable bones found for idle animation, trying manual approach');
+                    setupManualIdleAnimation();
+                }
+            } catch (error) {
+                console.error('Error setting up idle animation:', error);
+                setupManualIdleAnimation();
+            }
+        }
+
+        function setupManualIdleAnimation() {
+            console.log('Setting up manual idle animation...');
+            try {
+                // Try to find bones manually in the scene
+                let headBone = null;
+                let spineBone = null;
+
+                vrm.scene.traverse((child) => {
+                    if (child.isBone) {
+                        const name = child.name.toLowerCase();
+                        if (name.includes('head') && !headBone) {
+                            headBone = child;
+                        }
+                        if (name.includes('spine') && !spineBone) {
+                            spineBone = child;
+                        }
+                    }
+                });
+
+                console.log('Manual search - Head bone:', headBone ? headBone.name : 'Not found');
+                console.log('Manual search - Spine bone:', spineBone ? spineBone.name : 'Not found');
+
+                if (headBone || spineBone) {
+                    const tracks = [];
+
+                    // Manual head animation
+                    if (headBone) {
+                        const headRotationTrack = new THREE.VectorKeyframeTrack(
+                            `${headBone.name}.rotation[x]`,
+                            [0, 2, 4, 6, 8],
+                            [0, 0, 0, 0, 0] // X rotation only
+                        );
+                        tracks.push(headRotationTrack);
+                    }
+
+                    // Manual spine animation
+                    if (spineBone) {
+                        const spinePositionTrack = new THREE.VectorKeyframeTrack(
+                            `${spineBone.name}.position`,
+                            [0, 1, 2, 3, 4],
+                            [
+                                0, 0, 0,
+                                0, 0.01, 0,
+                                0, 0, 0,
+                                0, -0.005, 0,
+                                0, 0, 0
+                            ]
+                        );
+                        tracks.push(spinePositionTrack);
+                    }
+
+                    if (tracks.length > 0) {
+                        const idleClip = new THREE.AnimationClip('manualIdle', 8, tracks);
+                        if (!mixer) {
+                            mixer = new THREE.AnimationMixer(vrm.scene);
+                        }
+                        idleAction = mixer.clipAction(idleClip);
+                        idleAction.loop = THREE.LoopRepeat;
+                        idleAction.play();
+                        console.log('Manual idle animation setup complete');
+                    }
+                } else {
+                    console.log('No bones found for animation');
+                }
+            } catch (error) {
+                console.error('Error in manual idle animation setup:', error);
+            }
+        }
+
+        function playLipSync() {
+            if (lipSyncAction) {
+                lipSyncAction.reset();
+                lipSyncAction.play();
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const deltaTime = 0.016; // ~60fps
+
+            if (controls) {
+                controls.update();
+            }
+
+            if (mixer) {
+                mixer.update(deltaTime);
+            }
+
+            // Handle blinking timer - force blink to test
+            if (vrm && blinkAction) {
+                blinkTimer += deltaTime;
+                // Blink more frequently for testing: every 2-4 seconds
+                if (blinkTimer > 2 + Math.random() * 2) {
+                    console.log('Playing blink animation');
+                    blinkAction.reset();
+                    blinkAction.play();
+                    blinkTimer = 0;
+                }
+            }
+
+            // Handle idle animation
+            if (vrm && idleAction) {
+                idleTimer += deltaTime;
+                // Idle animation runs continuously
+                if (idleTimer > 10) { // Reset timer occasionally
+                    idleTimer = 0;
+                }
+            }
+
+
+            // Jiggle physics for hair, tail, ears, and breasts
+            if (jiggleBones.length > 0) {
+                jiggleTimer += deltaTime;
+                jiggleBones.forEach((jiggleBone, index) => {
+                    // Create organic jiggle movement based on bone type
+                    const time = jiggleTimer * jiggleBone.frequency + index * 0.5; // Offset each bone
+
+                    let jiggleX, jiggleY, jiggleZ, rotX, rotZ;
+
+                    switch (jiggleBone.type) {
+                        case 'hair':
+                            // Hair: subtle waves, mostly side to side
+                            jiggleX = Math.sin(time) * jiggleBone.jiggleAmount;
+                            jiggleY = Math.sin(time * 0.3) * jiggleBone.jiggleAmount * 0.2;
+                            jiggleZ = Math.cos(time * 0.8) * jiggleBone.jiggleAmount * 0.5;
+                            rotX = Math.sin(time * 0.6) * 0.02;
+                            rotZ = Math.cos(time * 0.4) * 0.03;
+                            break;
+
+                        case 'tail':
+                            // Tail: bouncy, more vertical movement
+                            jiggleX = Math.sin(time) * jiggleBone.jiggleAmount;
+                            jiggleY = Math.sin(time * 1.2) * jiggleBone.jiggleAmount;
+                            jiggleZ = Math.cos(time * 0.9) * jiggleBone.jiggleAmount * 0.7;
+                            rotX = Math.sin(time * 0.8) * 0.04;
+                            rotZ = Math.cos(time * 1.1) * 0.05;
+                            break;
+
+                        case 'ear':
+                            // Ears: follow head movement + jiggle physics + petting boost
+                            const earBase = jiggleBone.jiggleAmount;
+                            const earBoost = earJiggleIntensity * 1.5; // Extra jiggle when petting
+                            const earTotal = earBase + earBoost;
+
+                            // Base ear movement follows head rotation
+                            const headRotationInfluence = headBone ? headBone.rotation.y * 0.5 : 0;
+
+                            jiggleX = Math.sin(time * 2) * earTotal * 0.3 + headRotationInfluence * 0.2;
+                            jiggleY = Math.cos(time * 2.2) * earTotal * 0.2;
+                            jiggleZ = Math.sin(time * 1.8) * earTotal * 0.1 + headRotationInfluence * 0.1;
+                            rotX = Math.sin(time * 1.5) * (0.01 + earBoost * 0.02); // Much smaller rotation
+                            rotZ = Math.cos(time * 1.7) * (0.015 + earBoost * 0.02) + headRotationInfluence * 0.05;
+                            break;
+
+                        case 'breast':
+                            // Breasts: moderate, natural bounce + click trigger boost
+                            const baseJiggle = jiggleBone.jiggleAmount;
+                            const clickBoost = breastJiggleIntensity * 2.0; // Extra jiggle when clicked
+                            const totalJiggle = baseJiggle + clickBoost;
+
+                            jiggleX = Math.sin(time) * totalJiggle;
+                            jiggleY = Math.sin(time * 0.8) * totalJiggle * 0.8;
+                            jiggleZ = Math.cos(time * 1.1) * totalJiggle * 0.4;
+                            rotX = Math.sin(time * 0.7) * (0.02 + clickBoost * 0.1);
+                            rotZ = Math.cos(time * 0.9) * (0.025 + clickBoost * 0.1);
+                            break;
+
+                        default:
+                            // Fallback
+                            jiggleX = Math.sin(time) * jiggleBone.jiggleAmount;
+                            jiggleY = Math.cos(time * 0.7) * jiggleBone.jiggleAmount * 0.5;
+                            jiggleZ = Math.sin(time * 1.3) * jiggleBone.jiggleAmount * 0.3;
+                            rotX = Math.sin(time * 0.8) * 0.05;
+                            rotZ = Math.cos(time * 1.1) * 0.03;
+                    }
+
+                    // Apply jiggle to position
+                    jiggleBone.bone.position.x = jiggleBone.originalPosition.x + jiggleX;
+                    jiggleBone.bone.position.y = jiggleBone.originalPosition.y + jiggleY;
+                    jiggleBone.bone.position.z = jiggleBone.originalPosition.z + jiggleZ;
+
+                    // Add slight rotation jiggle
+                    jiggleBone.bone.rotation.x = jiggleBone.originalRotation.x + rotX;
+                    jiggleBone.bone.rotation.z = jiggleBone.originalRotation.z + rotZ;
+                });
+            }
+
+            // Handle smooth touch deformation effect
+            updateTouchDeformation(deltaTime);
+
+            // Handle breast jiggle trigger
+            if (breastJiggleTrigger) {
+                const timeSinceTrigger = (Date.now() - breastJiggleTrigger) / 1000; // Convert to seconds
+                if (timeSinceTrigger < 2.0) { // Jiggle for 2 seconds
+                    breastJiggleIntensity = Math.max(0, 1.0 - (timeSinceTrigger / 2.0)); // Fade out
+                } else {
+                    breastJiggleTrigger = null;
+                    breastJiggleIntensity = 0;
+                }
+            }
+
+            // Handle ear jiggle trigger from petting - longer duration but fades out
+            if (earJiggleTrigger) {
+                const timeSinceTrigger = (Date.now() - earJiggleTrigger) / 1000; // Convert to seconds
+                if (timeSinceTrigger < 3.0) { // Jiggle for 3 seconds, then fade out
+                    earJiggleIntensity = Math.max(0, 1.0 - (timeSinceTrigger / 3.0)); // Fade out over 3 seconds
+                } else {
+                    earJiggleTrigger = null;
+                    earJiggleIntensity = 0;
+                }
+            }
+
+            // Handle continuous petting
+            if (continuousPetting && isPetting) {
+                const currentTime = Date.now();
+                const petDuration = (currentTime - petStartTime) / 1000; // Duration in seconds
+
+                // Trigger ear jiggle every 0.5 seconds during continuous petting
+                if (petDuration > 0 && Math.floor(petDuration / 0.5) !== Math.floor((petDuration - deltaTime) / 0.5)) {
+                    triggerEarJiggle();
+                    console.log('Continuous petting - ear jiggle triggered!');
+                }
+
+                // Show occasional petting feedback
+                if (Math.floor(petDuration) !== Math.floor(petDuration - deltaTime)) {
+                    const now = Date.now();
+                    if (now - lastPetTime > 2000) { // Every 2 seconds during continuous petting
+                        showNotification('Mia loves the continuous petting! 🐱💕', 'success');
+                        lastPetTime = now;
+                    }
+                }
+            }
+
+            // Handle smooth expression transitions
+            updateExpressionTransitions(deltaTime);
+
+            // Handle blushing timer
+            if (isBlushing) {
+                const timeSinceBlush = (Date.now() - blushTimer) / 1000;
+                if (timeSinceBlush > 5) { // Blush for 5 seconds, then fade out
+                    // Smoothly fade out blush expression
+                    if (vrm && vrm.expressionManager) {
+                        const expressions = vrm.expressionManager.expressions;
+                        expressions.forEach(expr => {
+                            if (expr.expressionName.toLowerCase().includes('blush') ||
+                                expr.expressionName.toLowerCase().includes('shy') ||
+                                expr.expressionName.toLowerCase().includes('embarrass') ||
+                                expr.expressionName.toLowerCase().includes('happy') ||
+                                expr.expressionName.toLowerCase().includes('smile')) {
+                                smoothExpressionTransition(expr, 0, 1.0); // 1 second fade out
+                            }
+                        });
+                    }
+                    isBlushing = false;
+                    console.log('Blushing fading out');
+                }
+            }
+
+            // Handle look-at-camera timer
+            if (isLookingAtCamera) {
+                const timeSinceLook = (Date.now() - lookAtCameraTimer) / 1000;
+                if (timeSinceLook > 8) { // Look at camera for 8 seconds after chat
+                    isLookingAtCamera = false;
+                    console.log('Stopped looking at camera');
+                }
+            }
+
+            // Update smooth head rotation
+            updateHeadRotation();
+
+            // Add natural breathing movement
+            updateBreathing();
+
+            // Add micro-expressions for more life-like appearance
+            updateMicroExpressions();
+
+            // Update all movement systems
+            updateHeadRotation();
+            updateBreathing();
+            updateMicroExpressions();
+            updateBodySway();
+            updateArmMovement();
+            updatePostureShifts();
+            autonomousLookAround();
+
+            // Eye blinking removed - eyes stay in neutral position
+
+            // Force test animations if they exist
+            if (vrm && !blinkAction && vrm.expressionManager) {
+                // Try to manually trigger expressions for testing
+                const expressions = vrm.expressionManager.expressions;
+                if (expressions.length > 0 && Math.random() < 0.01) { // 1% chance per frame
+                    const randomExpr = expressions[Math.floor(Math.random() * expressions.length)];
+                    console.log('Testing expression:', randomExpr.expressionName);
+                    // This would require setting expression weights manually
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Notification system
+        function showNotification(text, type = 'info') {
+            notificationText.textContent = text;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            console.log('Sending message:', message);
+            if (message) {
+                socket.emit('chat message', message);
+                messageInput.value = '';
+
+                // Show loading indicator
+                showNotification('Mia is thinking...', 'info');
+            }
+        }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Pet mode toggle
+        document.getElementById('pet-toggle').addEventListener('click', togglePetMode);
+
+        // Socket listeners
+        socket.on('chat response', (response) => {
+            console.log('Received chat response:', response);
+            showNotification(response, 'success');
+
+            // Make Mia look at camera when chatting
+            lookAtCamera();
+
+            // Speak with lip sync if available
+            if ('speechSynthesis' in window) {
+                speakWithLipSync(response);
+            }
+        });
+
+        socket.on('model interaction response', (data) => {
+            console.log('Received interaction response:', data);
+            showNotification(data.response, 'success');
+        });
+
+        function speakWithLipSync(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                utterance.volume = 0.8;
+
+                utterance.onstart = () => {
+                    playLipSync();
+                };
+
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function initializeBoneTesting() {
+            const boneList = document.getElementById('bone-list');
+            const toggleBtn = document.getElementById('bone-test-toggle');
+            const panel = document.getElementById('bone-test-panel');
+
+            // Create bone list
+            allBones.forEach((bone, index) => {
+                const boneItem = document.createElement('div');
+                boneItem.className = 'bone-item';
+                boneItem.innerHTML = `
+                    <span>${bone.name}</span>
+                    <button class="bone-test-btn" onclick="testBone(${index})">Test</button>
+                `;
+                boneList.appendChild(boneItem);
+            });
+
+            // Toggle panel visibility
+            toggleBtn.addEventListener('click', () => {
+                panel.classList.toggle('active');
+            });
+
+            console.log(`Bone testing system initialized with ${allBones.length} bones`);
+        }
+
+        function testBone(boneIndex) {
+            if (boneIndex >= 0 && boneIndex < allBones.length) {
+                currentTestBone = allBones[boneIndex];
+                boneTestMode = true;
+                testAnimationTime = 0;
+
+                // Reset bone to neutral position
+                currentTestBone.rotation.set(0, 0, 0);
+                currentTestBone.position.set(0, 0, 0);
+                currentTestBone.scale.set(1, 1, 1);
+
+                showNotification(`Testing bone: ${currentTestBone.name}`, 'info');
+                console.log('Testing bone:', currentTestBone.name, currentTestBone);
+            }
+        }
+
+        function updateBoneTesting(deltaTime) {
+            if (boneTestMode && currentTestBone) {
+                testAnimationTime += deltaTime;
+
+                // Create a test animation that moves the bone in different ways
+                const time = testAnimationTime;
+
+                // Test rotation on all axes - increased for visibility
+                currentTestBone.rotation.x = Math.sin(time * 2) * 1.0; // Pitch - doubled
+                currentTestBone.rotation.y = Math.sin(time * 1.5) * 1.0; // Yaw - doubled
+                currentTestBone.rotation.z = Math.sin(time * 1) * 1.0; // Roll - doubled
+
+                // Test position (more visible)
+                currentTestBone.position.x = Math.sin(time * 3) * 0.3; // Increased from 0.1
+                currentTestBone.position.y = Math.sin(time * 2.5) * 0.3; // Increased from 0.1
+                currentTestBone.position.z = Math.sin(time * 2) * 0.3; // Increased from 0.1
+
+                // Test scale (more visible)
+                const scale = 1 + Math.sin(time * 4) * 0.3; // Increased from 0.1
+                currentTestBone.scale.set(scale, scale, scale);
+
+                console.log('Bone test active:', currentTestBone.name, 'rotation:', currentTestBone.rotation.x.toFixed(3));
+
+                // Stop test after 10 seconds
+                if (testAnimationTime > 10) {
+                    // Reset bone
+                    currentTestBone.rotation.set(0, 0, 0);
+                    currentTestBone.position.set(0, 0, 0);
+                    currentTestBone.scale.set(1, 1, 1);
+
+                    boneTestMode = false;
+                    currentTestBone = null;
+                    testAnimationTime = 0;
+                    showNotification('Bone test completed', 'success');
+                }
+            }
+        }
+
+        function forceTestMovements() {
+            // Force visible test movements on key bones to verify they work
+            const time = Date.now() * 0.001;
+
+            if (headBone) {
+                // Force head movement for testing - more controlled
+                headBone.rotation.x = Math.sin(time * 0.5) * 0.1; // Reduced from 0.2
+                headBone.rotation.y = Math.sin(time * 0.3) * 0.15; // Reduced from 0.3
+                console.log('Head forced movement:', headBone.rotation.x.toFixed(3), headBone.rotation.y.toFixed(3));
+            }
+
+            if (leftArmBone) {
+                // Force arm movement for testing - more natural
+                leftArmBone.rotation.x = Math.sin(time * 0.8) * 0.2; // Reduced from 0.4
+                leftArmBone.rotation.z = Math.sin(time * 0.6) * 0.15; // Reduced from 0.3
+                console.log('Left arm forced movement:', leftArmBone.rotation.x.toFixed(3));
+            }
+
+            if (hipsBone) {
+                // Force hip movement for testing - more subtle
+                hipsBone.rotation.y = Math.sin(time * 0.4) * 0.1; // Reduced from 0.2
+                hipsBone.position.y = Math.sin(time * 0.7) * 0.02; // Reduced from 0.05
+                console.log('Hips forced movement:', hipsBone.rotation.y.toFixed(3));
+            }
+
+            // Add some floating effect to make her seem more grounded
+            if (hipsBone) {
+                hipsBone.position.y = -1.2 + Math.sin(time * 0.3) * 0.005; // Very gentle floating, lower position
+            }
+        }
+
+        // Make functions global for onclick handlers
+        window.testBone = testBone;
+
+        // Initialize everything
+        console.log('Page loaded, initializing...');
+        window.addEventListener('load', () => {
+            console.log('Window loaded, starting Three.js...');
+            initThreeJS();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mia AI Test Page</h1>
+
+    <div class="test-section">
+        <h2>Basic Functionality Test</h2>
+        <button onclick="testSocket()">Test Socket Connection</button>
+        <button onclick="testThreeJS()">Test Three.js</button>
+        <button onclick="testSpeech()">Test Speech Synthesis</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Chat Test</h2>
+        <input type="text" id="test-input" placeholder="Type a test message..." style="padding: 8px; width: 200px;">
+        <button onclick="sendTestMessage()">Send Test Message</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Log Output</h2>
+        <div id="log"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const logDiv = document.getElementById('log');
+
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function clearLog() {
+            logDiv.innerHTML = '';
+        }
+
+        function testSocket() {
+            log('Testing socket connection...');
+            socket.emit('chat message', 'Hello from test page!');
+        }
+
+        function testThreeJS() {
+            log('Testing Three.js...');
+            try {
+                // Test if Three.js CDN is accessible
+                fetch('https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js')
+                    .then(response => {
+                        if (response.ok) {
+                            log('✓ Three.js CDN is accessible');
+                        } else {
+                            log('✗ Three.js CDN not accessible');
+                        }
+                    })
+                    .catch(error => {
+                        log('✗ Three.js CDN error: ' + error.message);
+                    });
+            } catch (error) {
+                log('✗ Three.js test failed: ' + error.message);
+            }
+        }
+
+        function testSpeech() {
+            log('Testing speech synthesis...');
+            if ('speechSynthesis' in window) {
+                log('✓ Speech synthesis is supported');
+                const utterance = new SpeechSynthesisUtterance('Hello, this is a test of speech synthesis.');
+                utterance.onstart = () => log('Speech started');
+                utterance.onend = () => log('Speech ended');
+                speechSynthesis.speak(utterance);
+            } else {
+                log('✗ Speech synthesis not supported');
+            }
+        }
+
+        function sendTestMessage() {
+            const input = document.getElementById('test-input');
+            const message = input.value.trim();
+            if (message) {
+                log('Sending message: ' + message);
+                socket.emit('chat message', message);
+                input.value = '';
+            }
+        }
+
+        // Socket event listeners
+        socket.on('connect', () => {
+            log('✓ Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            log('✗ Disconnected from server');
+        });
+
+        socket.on('chat response', (response) => {
+            log('Received response: ' + response);
+        });
+
+        // Initialize
+        log('Test page loaded');
+        log('Socket.IO version: ' + (socket ? 'loaded' : 'not loaded'));
+    </script>
+</body>
+</html>
